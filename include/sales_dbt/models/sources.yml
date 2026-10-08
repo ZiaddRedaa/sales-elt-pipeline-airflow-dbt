@@ -1,0 +1,10 @@
+sversion: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: accounts
+      - name: products
+      - name: sales_pipeline
+      - name: sales_teams

@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_accounts
+    description: "Cleaned accounts data"
+    columns:
+      - name: account_name
+        description: "The name of the account/company"
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_products
+    description: "Cleaned products data"
+    columns:
+      - name: product_name
+        description: "The name of the product"
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_sales_pipeline
+    description: "Cleaned and standardized sales pipeline data"
+    columns:
+      - name: opportunity_id
+        description: "Unique identifier for each sales opportunity"
+        tests:
+          - not_null
+          - unique
+      - name: close_value
+        description: "The final value of the closed deal"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
+  - name: fct_sales_performance
+    description: "Final fact table for sales performance analysis"
+    columns:
+      - name: opportunity_id
+        description: "Primary key for the fact table"
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        description: "Product sold in the opportunity"
+        tests:
+          - relationships:
+              to: ref('stg_products')
+              field: product_name
